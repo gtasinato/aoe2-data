@@ -1,4 +1,4 @@
 not_versioned/*
-!not_versioned/.gitkeep
+!not_versioned/**/.gitkeep
 .ipynb*
 **/__pycache__/
