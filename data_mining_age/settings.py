@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.humanize',
     'landing.apps.LandingConfig',
     'base.apps.BaseConfig',
     'harvester.apps.HarvesterConfig',

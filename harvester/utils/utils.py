@@ -1,12 +1,23 @@
 import requests
 import pandas as pd
-from datetime import datetime
 import os
 import numpy as np
 import plotly.graph_objects as go
+from ..models import Leaderboard
+from django.utils import timezone as tz
+from bs4 import BeautifulSoup as bs
 
 
 def harvest_leaderboard(base_url, id):
+    name = '{date}_{leaderboard_id}.txt'.format(date=tz.now().strftime('%Y-%m-%d'),
+                                    leaderboard_id=id)
+    path = './not_versioned/data/'+ name
+
+# if database entry already exists, just return it, else create it
+    query =  Leaderboard.objects.filter(csv_table__contains=name)
+    if query:
+        result = query.get()
+        return result
 
     window_index = 1
     step = 10000
@@ -28,19 +39,35 @@ def harvest_leaderboard(base_url, id):
             print('Data harvested!')
             break
     print('Zipping the dataset...')
-    path = './not_versioned/data/{name}_{leaderboard_id}.{ext}'.format(name=datetime.now().strftime('%Y-%m-%d'), leaderboard_id=id, ext='txt')
     data.to_csv(path)
     print('Process completed!')
-
-    return path
+    result = Leaderboard.objects.create(leaderboard_id=id,
+                         date=tz.now(),
+                         csv_table=path,
+                         population=len(data.index),
+                         average_elo=data.rating.mean(),
+                         top_player=data.name.iat[0]
+                         )
+    return result
 
 # TODO: write down subroutine to plot dataframe stored in csv file (leaderboard)
 # def poltter(path):
 #     data = pd.read_csv(path)
-def create_plot(path):
-    df = pd.read_csv(path)
-    percentage = [np.around(np.mean(df.rating <= x)*100, 2) for x in df.rating]
+def create_plot(leaderboard):
+    if leaderboard.plot is not None:
+        return leaderboard.plot
 
+    df = pd.read_csv(leaderboard.csv_table)
+    print(df.head())
+    titles = {
+              0 : 'Unranked',
+              1 : 'Deathmatch 1v1',
+              2 : 'Team Deathmatch',
+              3 : 'Random Map 1v1',
+              4 : 'Team Random Map'
+              }
+    percentage = [np.around(np.mean(df.rating <= x)*100, 2) for x in df.rating]
+    print('Start Plotting')
     fig = go.Figure()
 
     fig.add_trace(go.Histogram(x=df.rating, hoverinfo = 'none'))
@@ -50,12 +77,19 @@ def create_plot(path):
             mode="lines",
             opacity = 0
     ))
-
+    print('Updating layout')
     fig.update_layout(barmode='overlay')
     fig.update_layout(hovermode='x unified')
     fig.update_layout(showlegend=False)
+    fig.update_layout(title = titles[leaderboard.leaderboard_id])
+    print('Writing to html')
+    fig.write_html('not_versioned/test.html', include_plotlyjs='cdn')
+    print('Cleaning the output')
+    with open('not_versioned/test.html', 'r') as f:
+        soup = bs(f, 'html.parser')
 
-    return fig
+    return str(soup.find('div'))
+
 
 def compute_statistics(data):
     pass

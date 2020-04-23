@@ -1,9 +1,28 @@
-<h1>Script Run!</h1>
+<html>
+{% load humanize %}
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
 
-Good job!
+  <body>
+    <h1>Script Run!</h1>
 
-Do you want to plot it?
+    Good job!
+
+    Do you want to plot it?
+<ul>
+     <li>Number of players: {{ leaderboard.population }}</li>
+     <li>Average Elo: {{ leaderboard.average_elo|floatformat:2 }}</li>
+     <li>Top player: {{ leaderboard.top_player }}</li>
+   </ul>
+
 
 {% autoescape off %}
-{{ plot_div }}
+{{ leaderboard.plot }}
 {% endautoescape %}
+
+<a href="{% url 'harvester:index' %}">Go back</a><br>
+
+
+  </body>
+</html>
