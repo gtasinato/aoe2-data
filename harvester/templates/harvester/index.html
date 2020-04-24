@@ -1,94 +1,66 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <script>
-    function showPage() {
-      document.getElementById("first").style.display = "none";
-      document.getElementById("loader").style.display = "block";
-      document.getElementById("second").style.display = "block";
+{% extends "base.html" %}
+{% load static %}
+{% block header %}
+  <script>
+  function showPage() {
+    document.getElementById("first").style.display = "none";
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("second").style.display = "block";
+  }
+  </script>
+  <link rel="stylesheet" href="{% static "harvester/css/loader.css" %}">
+  <style>
+    .button1 {
+      color: white;
+      background-color: #555555;
+      border-radius: 8px;
+      border: 2px solid #555555;
     }
-    </script>
-    <style>
-      /* Center the loader */
-      #loader {
-        display: none;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        z-index: 1;
-        width: 150px;
-        height: 150px;
-        margin: -75px 0 0 -75px;
-        border: 16px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 16px solid #3498db;
-        width: 120px;
-        height: 120px;
-        -webkit-animation: spin 2s linear infinite;
-        animation: spin 2s linear infinite;
-      }
+    .button1:hover {
+      background-color:  #e7e7e7 ;
+      color:  #555555;
+    }
 
-      @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
-      }
+  </style>
+{% endblock header %}
+{% block section_title %}
+<div>
+  <h1>Some Text</h1>
+</div>
+{% endblock section_title %}
 
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
+{% block content %}
 
-      /* Add animation to "page content" */
-      .animate-bottom {
-        position: relative;
-        -webkit-animation-name: animatebottom;
-        -webkit-animation-duration: 1s;
-        animation-name: animatebottom;
-        animation-duration: 1s
-      }
+<div class='container-fluid' style='margin-top: 15px'>
+  <div class="row"  id='first'>
+    <div class="col-sm-6" style="margin-top: 10px">
+      Let's harvest some data! Select the leaderboard to scrape:
+    </div>
 
-      @-webkit-keyframes animatebottom {
-        from { bottom:-100px; opacity:0 }
-        to { bottom:0px; opacity:1 }
-      }
+    <div class="col-sm-6" style="text-align: center; margin-top: 10px">
+      <form method="post">
+        {% csrf_token %}
+        <select name="choice">
+            {% for index, text in titles.items %}
+            <option value="{{ index }}">{{ text }}</option>
+            {% endfor %}
+        </select>
+          <button class="button button1" type="submit" name="run_script" onclick="showPage()">Run harvest</button>
+      </form>
+    </div>
 
-      @keyframes animatebottom {
-        from{ bottom:-100px; opacity:0 }
-        to{ bottom:0; opacity:1 }
-      }
-    </style>
-  </head>
+  </div>
 
-  <body>
-    <h1>Harvester index</h1>
-
-      <div id='first'>
-        Let's harvest some data!
-
-        <p>
-          Select the leaderboard you want to scrape:
-        </p>
-
-        <form method="post">
-          {% csrf_token %}
-          <select name="choice">
-              {% for index, text in titles.items %}
-              <option value="{{ index }}">{{ text }}</option>
-              {% endfor %}
-          </select>
-            <button type="submit" name="run_script" onclick="showPage()">Run harvest</button>
-        </form>
-        <form method="post">
-          {% csrf_token %}
-          <button type="submit" name="button">Go to the fun zone</button>
-        </form>
-      </div>
-
+  <div class="row">
     <div id="loader"></div>
-    <div id="second" style="display:none">Some text just to try</div>
+  </div>
+  <div class="row" id="second" style="display:none">
+    Some text just to try
+  </div>
 
-  </body>
+</div>
+
+
+
+
+{% endblock content %}

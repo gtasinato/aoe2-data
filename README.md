@@ -10,14 +10,15 @@ It uses `Django` as framework, `pandas` for the data manipulation and `plotly` f
  - [x] API Interaction
  - [x] Interactive Plotting
  - [ ] Filling Placeholders
+ - [ ] Site map
  - [ ] CSS Styling
  - [ ] Admin Interface
- - [ ] Player Database
- - [ ] Player Profiles
  - [ ] Match Predictions (Elo)
 
 ### Maybes
 
+- [ ] Player Database
+- [ ] Player Profiles
 - [ ] Lobby Listing
 - [ ] In Game Statistics
 - [ ] Caching Optimization
@@ -27,6 +28,7 @@ It uses `Django` as framework, `pandas` for the data manipulation and `plotly` f
 
  - [ ] Messaging board
  - [ ] Discord Integration
+ - [x] Reddit Integration
  - [ ] Build Orders
  - [ ] Twitch Integration
  - [ ] Tournament Calendar

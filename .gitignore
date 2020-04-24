@@ -2,3 +2,5 @@ not_versioned/*
 !not_versioned/**/.gitkeep
 .ipynb*
 **/__pycache__/
+media/*
+static_debug/*

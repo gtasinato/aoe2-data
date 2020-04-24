@@ -1,28 +1,28 @@
-<html>
+{% extends "base.html" %}
 {% load humanize %}
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  </head>
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12" style="text-align: center;">
+      <h1>Results</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      The plot is interactive! <br>
+      It counts the number of players  (y axis) at a certain Elo (x axis, grouped with a bin of 5 points)
+    </div>
+    <div class="col-sm-6">
+      <ul>
+         <li>Number of players: {{ leaderboard.population }}</li>
+         <li>Average Elo: {{ leaderboard.average_elo|floatformat:2 }}</li>
+         <li>Top player: {{ leaderboard.top_player }}</li>
+       </ul>
+    </div>
+  </div>
+</div>
 
-  <body>
-    <h1>Script Run!</h1>
-
-    Good job!
-
-    Do you want to plot it?
-<ul>
-     <li>Number of players: {{ leaderboard.population }}</li>
-     <li>Average Elo: {{ leaderboard.average_elo|floatformat:2 }}</li>
-     <li>Top player: {{ leaderboard.top_player }}</li>
-   </ul>
-
-
-{% autoescape off %}
-{{ leaderboard.plot }}
-{% endautoescape %}
-
-<a href="{% url 'harvester:index' %}">Go back</a><br>
-
-
-  </body>
-</html>
+  {% autoescape off %}
+    {{ leaderboard.plot }}
+  {% endautoescape %}
+{% endblock content %}

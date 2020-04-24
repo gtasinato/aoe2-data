@@ -9,8 +9,9 @@ from bs4 import BeautifulSoup as bs
 
 
 def harvest_leaderboard(base_url, id):
-    name = '{date}_{leaderboard_id}.txt'.format(date=tz.now().strftime('%Y-%m-%d'),
-                                    leaderboard_id=id)
+    game = 'aoe2de'
+    name = '{date}_{code}_{leaderboard_id}.txt'.format(date=tz.now().strftime('%Y-%m-%d'),
+                                    leaderboard_id=id, code=game)
     path = './not_versioned/data/'+ name
 
 # if database entry already exists, just return it, else create it
@@ -26,7 +27,7 @@ def harvest_leaderboard(base_url, id):
     print('Parameters set. Starting the harvesting')
     while True:
         print('Collecting entries from {} to {}'.format(window_index, window_index + step -1))
-        request  = base_url.format(leaderboard_id=id, start=window_index, count=step)
+        request  = base_url.format(code=game, leaderboard_id=id, start=window_index, count=step)
         raw = requests.get(request).json()
         print('Request handeled. Converting to pandas DataFrame.')
         aux = pd.DataFrame(raw['leaderboard'])
@@ -46,7 +47,8 @@ def harvest_leaderboard(base_url, id):
                          csv_table=path,
                          population=len(data.index),
                          average_elo=data.rating.mean(),
-                         top_player=data.name.iat[0]
+                         top_player=data.name.iat[0],
+                         game=game
                          )
     return result
 
@@ -59,13 +61,6 @@ def create_plot(leaderboard):
 
     df = pd.read_csv(leaderboard.csv_table)
     print(df.head())
-    titles = {
-              0 : 'Unranked',
-              1 : 'Deathmatch 1v1',
-              2 : 'Team Deathmatch',
-              3 : 'Random Map 1v1',
-              4 : 'Team Random Map'
-              }
     percentage = [np.around(np.mean(df.rating <= x)*100, 2) for x in df.rating]
     print('Start Plotting')
     fig = go.Figure()
@@ -81,8 +76,7 @@ def create_plot(leaderboard):
     fig.update_layout(barmode='overlay')
     fig.update_layout(hovermode='x unified')
     fig.update_layout(showlegend=False)
-    fig.update_layout(title = titles[leaderboard.leaderboard_id])
-    print('Writing to html')
+#    print('Writing to html')
     fig.write_html('not_versioned/test.html', include_plotlyjs='cdn')
     print('Cleaning the output')
     with open('not_versioned/test.html', 'r') as f:

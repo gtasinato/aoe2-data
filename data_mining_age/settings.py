@@ -58,7 +58,9 @@ ROOT_URLCONF = 'data_mining_age.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,3 +124,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+TITLES = {
+        3 : 'Random Map 1v1',
+        4 : 'Team Random Map',
+        1 : 'Deathmatch 1v1',
+        2 : 'Team Deathmatch',
+        0 : 'Unranked'
+          }
+
+GAMES = {
+    'aoe2de' : 'Age of Empires 2: DE',
+    'aoe2hd' : 'Age of Empires 2: HD'
+}

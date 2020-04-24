@@ -3,28 +3,18 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .utils.utils import harvest_leaderboard, create_plot
 from .models import Leaderboard
+from django.conf import settings
+
 
 # Create your views here.
 def index(request):
-    titles = {
-              0 : 'Unranked',
-              1 : 'Deathmatch 1v1',
-              2 : 'Team Deathmatch',
-              3 : 'Random Map 1v1',
-              4 : 'Team Random Map'
-              }
 
     if request.method == 'POST' and 'run_script' in request.POST:
-        return redirect('harvester:loading', leaderboard_id = int(request.POST['choice']) )
+        return redirect('harvester:loading', leaderboard_id = int(request.POST['choice']))
 
-
-    elif request.method == 'POST':
-        print(request)
-        # return HttpResponseRedirect(reverse('harvester:result'))
-        return render(request, 'harvester/error.html')
     else:
         print('First landing')
-        return render(request, 'harvester/index.html', context={'titles': titles})
+        return render(request, 'harvester/index.html', context={'titles': settings.TITLES})
 #
 # def result(request, db_id):
 #     print('Plotting leaderboard {n}'.format(n=db_id))
@@ -37,7 +27,7 @@ def index(request):
 #     return render(request, 'harvester/result.html', context = context)
 
 def loading(request, leaderboard_id):
-    base_url = 'https://aoe2.net/api/leaderboard?game=aoe2de&leaderboard_id={leaderboard_id}&start={start}&count={count}'
+    base_url = 'https://aoe2.net/api/leaderboard?game={code}&leaderboard_id={leaderboard_id}&start={start}&count={count}'
     leaderboard = harvest_leaderboard(base_url, leaderboard_id)
     #print(reverse('harvester:result'))
 #    return redirect('harvester:result', db_id = leaderboard.id)
@@ -52,3 +42,9 @@ def loading(request, leaderboard_id):
     return render(request, 'harvester/result.html', context = context)
 
 #    return redirect('harvester:result', leaderboard = leaderboard)
+
+def archive(request):
+    context = {
+        
+    }
+    return render(request, 'harvester/archive.html', context = context)

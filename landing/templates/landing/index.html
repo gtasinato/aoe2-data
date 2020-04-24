@@ -1,3 +1,27 @@
-<h1>Landing index</h1>
+{% extends "base.html" %}
+{% load static %}
+{% block page_title %}Test title{% endblock page_title %}
 
-<a href="{% url 'harvester:index' %}">Go have fun!</a>
+
+{% block section_title %}
+<div class="jumbotron jumbotron-fluid bg-secondary" style="margin-bottom:0; max-height:125px; padding-top:10px">
+  <div class="page-header">
+  	<h1>Age of Empires 2<br /><small class="text-white-50">Data Mining Edition</small></h1>
+  </div>
+</div>
+{% endblock section_title %}
+{% block content %}
+<div class="container-fluid" style="margin-top: 25px">
+  <div class="row">
+    <div class="col-sm-8">
+      <a href="{% url 'harvester:index' %}">Go have fun!</a>
+    </div>
+    <div class="col-sm--4">
+      {% autoescape off %}
+        <script src='https://redditjs.com/subreddit.js' data-subreddit='aoe2', data-subreddit-mode='grid'></script>
+      {% endautoescape %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}
