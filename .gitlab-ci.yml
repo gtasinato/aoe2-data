@@ -1,3 +1,5 @@
+# .gitlab-ci.yml
+
 image: django:latest
 stages:
   - test
