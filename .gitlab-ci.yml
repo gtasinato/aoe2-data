@@ -1,3 +1,4 @@
+image: django:latest
 stages:
   - test
   - deploy
