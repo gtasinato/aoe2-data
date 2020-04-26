@@ -22,7 +22,9 @@
   </div>
 </div>
 
+
   {% autoescape off %}
-    {{ leaderboard.plot }}
+  {{ leaderboard.plot }}
+  {% comment %} {% include leaderboard.csv_table %} {% endcomment %}
   {% endautoescape %}
 {% endblock content %}

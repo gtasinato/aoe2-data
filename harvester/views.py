@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .utils.utils import harvest_leaderboard, create_plot
+from utils.utils import harvest_leaderboard, create_plot
 from .models import Leaderboard
 from django.conf import settings
 
@@ -45,6 +45,6 @@ def loading(request, leaderboard_id):
 
 def archive(request):
     context = {
-        
+
     }
     return render(request, 'harvester/archive.html', context = context)

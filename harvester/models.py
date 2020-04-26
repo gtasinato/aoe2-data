@@ -9,5 +9,5 @@ class Leaderboard(models.Model):
     csv_table = models.FilePathField(help_text='Path to the CSV file storing the dataset')
     population = models.IntegerField(help_text='Total number of players')
     average_elo = models.FloatField(help_text='Average elo')
-    plot = models.TextField(null=True, help_text='HTML plot of the dataset')
+    plot = models.TextField(null=True, help_text='Path to the HTML plot of the dataset')
     top_player = models.CharField(null=True, help_text='Top ranking player', max_length=100)
