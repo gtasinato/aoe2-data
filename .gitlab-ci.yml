@@ -1,0 +1,26 @@
+image: django:latest
+
+before_script:
+
+
+stages:
+    - staging
+    - production
+
+staging:
+    type: deploy
+    stage: staging
+    image: django:latest
+    script:
+        - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
+    only:
+        - development
+
+production:
+    type: deploy
+    stage: production
+    image: django:latest
+    script:
+        - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
+    only:
+        - master

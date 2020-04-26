@@ -14,6 +14,7 @@ It uses `Django` as framework, `pandas` for the data manipulation and `plotly` f
  - [ ] CSS Styling
  - [ ] Admin Interface
  - [ ] Match Predictions (Elo)
+ - [x] Gitlab / Heroku ci implementation
 
 ### Maybes
 
