@@ -20,10 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'mcy&^wl-ze2+xd@#vmc+=pecq4sqg!g)kvn22s!hzbz)aow&%8'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -120,12 +120,12 @@ USE_L10N = True
 USE_TZ = True
 # File storage
 
-MEDIA_ROOT = 'media/' 
+MEDIA_ROOT = 'media/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
+# STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
@@ -142,3 +142,7 @@ GAMES = {
     'aoe2de' : 'Age of Empires 2: DE',
     'aoe2hd' : 'Age of Empires 2: HD'
 }
+
+# Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())
