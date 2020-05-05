@@ -1,6 +1,9 @@
 not_versioned/*
 !not_versioned/**/.gitkeep
 media/*
+.psql_history
+.env
+
 
 # Editors
 .vscode/

@@ -1,14 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block header %}
-  <script>
-  function showPage() {
-    document.getElementById("first").style.display = "none";
-    document.getElementById("loader").style.display = "block";
-    document.getElementById("second").style.display = "block";
-  }
-  </script>
-  <link rel="stylesheet" href="{% static "harvester/css/loader.css" %}">
+
   <style>
     .button1 {
       color: white;
@@ -50,17 +43,5 @@
     </div>
 
   </div>
-
-  <div class="row">
-    <div id="loader"></div>
-  </div>
-  <div class="row" id="second" style="display:none">
-    Some text just to try
-  </div>
-
 </div>
-
-
-
-
 {% endblock content %}

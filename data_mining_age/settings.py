@@ -21,12 +21,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.environ['DEBUG_VALUE'] == 'True')
+DEBUG = (os.environ.get('DEBUG_VALUE', '') == 'True')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'aoe2-data.heroku.app.com']
 
 
 # Application definition
@@ -84,8 +84,13 @@ WSGI_APPLICATION = 'data_mining_age.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME', ''),
+        'USER': os.environ.get('DB_USER',''),
+        'PASSWORD': os.environ.get('DB_PASS', ''),
+        'HOST': 'localhost',
+        'PORT': '5432',
+
     }
 }
 db_from_env = dj_database_url.config()

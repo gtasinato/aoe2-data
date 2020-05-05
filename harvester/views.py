@@ -1,16 +1,24 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from utils.utils import harvest_leaderboard, create_plot
 from .models import Leaderboard
 from django.conf import settings
-
+import datetime
 
 # Create your views here.
 def index(request):
 
     if request.method == 'POST' and 'run_script' in request.POST:
-        return redirect('harvester:loading', leaderboard_id = int(request.POST['choice']))
+        req = int(request.POST['choice'])
+        game = 'aoe2de'
+        name = '{date}_{code}_{leaderboard_id}.txt'.format(date=datetime.datetime.now().strftime('%Y-%m-%d'),
+                                        leaderboard_id=req, code=game)
+
+        query =  Leaderboard.objects.filter(csv_table__contains=name)
+
+        leaderboard = get_object_or_404(query).id
+        return redirect('harvester:loading', leaderboard_id = leaderboard)
 
     else:
         print('First landing')
@@ -27,21 +35,15 @@ def index(request):
 #     return render(request, 'harvester/result.html', context = context)
 
 def loading(request, leaderboard_id):
-    base_url = 'https://aoe2.net/api/leaderboard?game={code}&leaderboard_id={leaderboard_id}&start={start}&count={count}'
-    leaderboard = harvest_leaderboard(base_url, leaderboard_id)
-    #print(reverse('harvester:result'))
-#    return redirect('harvester:result', db_id = leaderboard.id)
-    # print('Plotting leaderboard {n}'.format(n=db_id))
-    # leaderboard = get_object_or_404(Leaderboard, pk=db_id)
-    leaderboard.plot = create_plot(leaderboard)
-    leaderboard.save()
+
+    leaderboard = get_object_or_404(Leaderboard, pk=leaderboard_id)
+
     context = {
-                'leaderboard' : leaderboard
+                'leaderboard' : leaderboard,
+                'title' : settings.TITLES[leaderboard.leaderboard_id]
                 }
-    print(leaderboard.plot)
     return render(request, 'harvester/result.html', context = context)
 
-#    return redirect('harvester:result', leaderboard = leaderboard)
 
 def archive(request):
     context = {
